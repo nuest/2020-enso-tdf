@@ -1,0 +1,81 @@
+---
+output:
+  bookdown::pdf_document2:
+    keep_tex: yes
+    latex_engine: xelatex
+    # float is needed for floating figures
+    extra_dependencies: ["fontspec", "sectsty", "float"]
+    toc: false
+    fig_caption: yes
+#    number_sections: true
+header-includes:
+  # adjust figure captions
+  - \usepackage{caption}
+  - \captionsetup{font={footnotesize,bf,singlespacing}}
+  # Ecography requires double line spacing and line numbering
+  - \usepackage{setspace}
+  - \doublespacing
+  #- \usepackage{lineno}
+  #- \linenumbers
+
+title: "Monitoring and predictive mapping of floristic biodiversity along a climatic gradient in ENSO's terrestrial core region, NW Peru"
+#bibliography: transect_refs.bib
+#csl: ecography.csl
+# biblio-style: "natbib"
+#link-citations: true
+---
+
+Jannes Muenchow^1^, Petra Dieker^2^, Thea Böttcher^3^, Jonas Brock^4^, Gregor Didenko^1^, Tobias Fremout^5^, Desiree Jakubka^6^, Anke Jentsch^7^, Daniel Nüst^8^, Michael Richter^9^, Eric Frank Rodríguez^10^, Rodolfo Arismendiz Rodríguez^11^, Rütger Rollenbeck^12^, Pablo Salazar Zarsosa^11^, Patrick Schratz^1^, Alexander Brenning^1^
+
+^1^ Institute of Geography, Friedrich Schiller University Jena, Löbdergraben 32, 07743 Jena, Germany. jannes.muenchow\@uni-jena.de. ORCID: https://orcid.org/0000-0001-7834-4717
+
+^2^ Thünen Institute, Institute of Biodiversity, Bundesallee 65, 38116 Braunschweig, Germany
+
+^3^ Institute of Biology, Humboldt-University of Berlin, Philippstr. 13, 10115 Berlin, Germany
+
+^4^ Department of Ecological Modelling^,^ Helmholtz Centre for Environmental Research -- UFZ, Permoserstr. 15, 04318 Leipzig, Germany
+
+^5^ Division of Forest, Nature and Landscape, KU Leuven, Heverlee (Leuven), Belgium
+
+^6^ Institute of Ecology and Evolution, Friedrich-Schiller University Jena, Dornburger Str. 159, 07743 Jena, Germany
+
+^7^ Disturbance Ecology, BayCEER, University of Bayreuth, Universitätsstr. 30, 95440 Bayreuth, Germany
+
+^8^ Institute for Geoinformatics, University of Münster, Heisenbergstraße 2
+48149 Münster, Germany
+
+^9^ Institute of Geography, Friedrich Alexander University Erlangen-Nuremberg, 91058 Wetterkreuz 15, Erlangen, Germany
+
+^10^ Herbarium Truxillense (HUT), National University of Trujillo, Trujillo, Peru
+
+^11^ Faculty of Engineering, University of Piura, Piura, Peru
+
+^12^ Laboratory for Climatology and Remote Sensing (LCRS), Faculty of Geography, University of Marburg, Deutschhausstr.10, 35032 Marburg, Germany
+
+\section*{Abstract}
+
+Though tropical dry forests (TDF) are the most endangered tropical ecosystem, they are still understudied.
+Therefore, we studied the spatio-temporal effects of different El Niño Southern Oscillation (ENSO) episodes on TDF biodiversity in the terrestrial core region of ENSO in NW Peru.
+For this, we sampled 50 permanent vegetation plots along a climatic gradient in four years representing different ENSO episodes: dry La Niña (2011), humid La Niña (2012), moderate El Niño (2016) and a very humid neutral year (coastal El Niño; 2017).
+To visually represent the spatio-temporal changes in floristic composition, we used an innovative approach by modeling the ordination scores using a Generalized Additive Model and spatial cross-validation.
+Additionally, we applied variation partitioning to test if topographic or edaphic variables gained in importance as soon as water was no longer the limiting factor.
+Plant species richness increased under humid conditions during the humid La Niña (2012) and moderate El Niño (2016) year, and slightly decreased under the very humid conditions of the coastal El Niño year (2017).
+Vegetation composition changed also under more humid conditions.
+Vegetation cover was manifold higher in 2017 compared to all previous years.
+Edaphic and topographic variables gained in importance with increased water availability in 2012 and 2016, however, this effect was not further amplified under very wet conditions (2017).
+As nutrients can be equally important for primary production as water, we additionally executed an irrigation-nutrient experiment.
+The experiment showed that biomass production under wet Super Niño conditions was three times higher when a fertilizer treatment was added.
+Overall, our results can help to 1) protect local human populations from devastating ENSO effects through informed conservation management and the restoration of degraded ecosystems; 2) equip farmers with information regarding sustainable agrarian management.
+
+**Keywords**: tropical dry forest, Peru, ecosystem diversity, ordination, statistical learning, predictive mapping, irrigation-fertilization experiment, productivity
+
+*Acknowledgments* - We thank Msc Luis Urbina Zapata and Msc Nestor Atarama for their excellent work in the field. 
+We are grateful to NASA LP DAAC for granting access to remote sensing imagery (ASTER, MODIS).
+
+*Funding* - We are also most thankful to the Deutsche Forschungsgemeinschaft (project Ri 370/19-1) and a Friedrich Schiller University of Jena program to support junior researchers (project DRM/2017-05) for funding this work.
+
+*Author contributions* - JM, MR and AJ conceived the ideas.
+JM, TB, DJ, RAR and PSZ conducted the ﬁeldwork and collected the data with the help of collaborators.
+JM, PD, AB, TF, JB, GD, RR, DJ, PS, DN and EFR analyzed the data.
+JM, DN and PS were responsible for establishing the research compendium.
+JM led the writing with the assistance of all co-authors.

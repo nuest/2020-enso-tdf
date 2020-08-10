@@ -1,0 +1,12 @@
+data/modis/MODIS
+*.Rproj*
+.Rhistory
+.Rproj.user
+.RData
+.Rhistory
+*.log
+*.pdf
+*.html
+*.tex
+*.gz
+.Rbuildignore

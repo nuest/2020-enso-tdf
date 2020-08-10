@@ -1,0 +1,2 @@
+latexdiff text/ecography/round_2/enso_comp.tex text/ecography/round_3/enso_comp.tex > text/ecography/round_3/diff_ms.tex
+latexdiff text/ecography/round_2/title_page.tex text/ecography/round_3/title_page.tex > text/ecography/round_3/diff_tp.tex

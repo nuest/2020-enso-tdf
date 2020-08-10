@@ -1,0 +1,80 @@
+---
+output:
+  bookdown::pdf_document2:
+    keep_tex: no
+    latex_engine: xelatex
+    # float is needed for floating figures
+    extra_dependencies: ["fontspec", "sectsty", "float"]
+    toc: false
+    fig_caption: no
+    number_sections: true
+header-includes:
+  # adjust figure captions
+  - \usepackage{caption}
+  - \captionsetup{font={footnotesize,bf,singlespacing}}
+  # Ecography requires double line spacing and line numbering
+  - \usepackage{setspace}
+  - \doublespacing
+  - \usepackage{lineno}
+  - \linenumbers
+
+title: Supplementary Information
+bibliography: transect_refs.bib
+csl: ecography.csl
+# biblio-style: "natbib"
+link-citations: true
+---
+
+```{r setup, include=FALSE}
+library("knitr")
+library("kableExtra")
+library("tidyverse")
+library("here")
+# make sure that figures are allowed to float (hold the assigned position and are not always put on top of a page)
+# however, to make sure that the last figure is now positioned after the references, I needed to set fig.caption: no in the yaml header, see:
+# browseURL("https://stackoverflow.com/questions/29696172/how-to-hold-figure-position-with-figure-caption-in-pdf-output-of-knitr")
+knitr::opts_chunk$set(fig.pos = "H")
+```
+
+\subsection*{Appendix 1. Study area stratified by distance to sea in 10 classes.}
+
+```{r sampling-zones, echo=FALSE, fig.cap="Study area stratified by distance to sea in 10 classes."}
+p_1 = readRDS(here("images/18_sample_stratification.rds"))
+print(p_1)
+```
+
+\subsection*{Appendix 2: Detailed description of the methodological approach used for the irrigation-nutrient experiment.}
+
+We established 12 experimental plots of 3 × 3 m^2 in a sandy area typical of the region.
+Plots were located on the campus of the Universidad de Piura (Sechura Desert; 5°10'S, 80°38'W) on a sandy plain devoid of woody vegetation.
+We built a barbed wire fence around the experimental area to avoid the intrusion of domestic animals such as deer wandering the campus.
+The soils of the region are nutrient-poor (e.g., mean nitrogen content: 0.005 mg g^-1^) with high water infiltration rates [@muenchow_woody_2013].
+The vegetation surrounding the experimental area mirrors the typical plant formation around Piura, hence a transition between tropical desert and open-shrubland vegetation [@muenchow_coupling_2013].
+Prior to the irrigation experiment, we clipped the scarce aboveground biomass.
+Between December 2012 and May 2013 four plots received the simulated rainfall amount of the Super El Niño event in 1997/98 (1780 mm), another four received the rainfall amount of the moderate El Niño event in 1991/92 (258 l mm) and the remaining four plots served as baseline plots without any additional water input.
+Natural rainfall amounted to 53.9 mm during the study period (data: meteorological station of the University of Piura).
+If natural rainfall occurred, it was subtracted from the artificial water input in the case of the Normal and Super Niño plots.
+The irrigation water stemmed from rain-collecting tanks.
+Irrigation was applied using hand sprinklers [@ronnenberg_effects_2011] before and after sunset and followed the intensity and frequency of the rainfall events of the El Niño episodes in 1991/92 and 1997/98 as recorded by the automatic climatic station of the University of Piura.
+On the one hand, this reproduced the temporal pattern of El Niño rainfalls, which commonly took place at night time.
+An on the other hand, this procedure impeded undesired evaporation and subsequent salinization effects.
+The plan sandy underground prevented any runoff from irrigated plots to adjacent plots.
+
+In addition to the water treatment, two randomly chosen plots of each irrigation treatment received a fertilization treatment of 200kg/ha granular nitrogen fertilizer (NH~4~NO~3~) using a hand-held spreader [@whitford_effects_2011]. To prevent a quick washing out of the fertilizer, we spread the granular nitrogen fertilizer four times during the study period (each time: 50 kg/h).
+
+Plant development was monitored on a two-week basis and included the determination of plant species and corresponding coverage (%).
+Biomass was harvested between mid-April and the beginning of May.
+We randomly threw circles á 0.25 m^2^ four times into each plot and collected all plants within the circular area including the subterranean biomass. 
+Soil particles were thoroughly removed from the plants.
+Afterwards the biomass was subjected to 72 h of air drying.
+Before weighing, biomass was finally oven-dried at a temperature of 105 °C for 24 hours.
+From the total biomass we subtracted the subterranean biomass of the geophyte *Proboscidea altheifolia*, as it was already established prior to the irrigation experiment in most cases.
+
+\subsection*{Appendix 3. Number of species plotted against time during the duration of the experiment.}
+
+```{r alpha-exp, echo=FALSE, fig.cap="Number of species plotted against time during the duration of the experiment.", message=FALSE}
+p_1 = readRDS(file = here("images/18_irrigation_spri.rds"))
+print(p_1)
+```
+
+# References
