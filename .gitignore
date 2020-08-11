@@ -1,4 +1,5 @@
 data/modis/MODIS
+data/tables.gpkg
 *.Rproj*
 .Rhistory
 .Rproj.user
