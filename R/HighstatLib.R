@@ -1,3 +1,4 @@
+# Written by Dr. Alain Zuur (www.highstat.com)
 
 ##################################################################
 #Below are some functions that we took from the pairs help file and
