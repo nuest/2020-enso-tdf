@@ -6,7 +6,7 @@ output:
     # float is needed for floating figures
     extra_dependencies: ["fontspec", "sectsty", "float"]
     toc: false
-    fig_caption: no
+    fig_caption: yes
     number_sections: true
 header-includes:
   # adjust figure captions
@@ -17,6 +17,8 @@ header-includes:
   - \doublespacing
   - \usepackage{lineno}
   - \linenumbers
+  # Use Appendix instead of Figure in the caption
+  - \renewcommand{\figurename}{Appendix}
 
 title: Supplementary Information
 bibliography: transect_refs.bib
@@ -38,14 +40,14 @@ knitr::opts_chunk$set(fig.pos = "H")
 
 \subsection*{Appendix 1. Study area stratified by distance to sea in 10 classes.}
 
-```{r sampling-zones, echo=FALSE, fig.cap="Study area stratified by distance to sea in 10 classes."}
+```{r sampling-zones, echo=FALSE, fig.align="center",fig.cap="Study area stratified by distance to sea in 10 classes."}
 p_1 = readRDS(here("images/18_sample_stratification.rds"))
 print(p_1)
 ```
 
 \subsection*{Appendix 2: Detailed description of the methodological approach used for the irrigation-nutrient experiment.}
 
-We established 12 experimental plots of 3 × 3 m^2 in a sandy area typical of the region.
+We established 12 experimental plots of 3 × 3 m^2^ in a sandy area typical of the region.
 Plots were located on the campus of the Universidad de Piura (Sechura Desert; 5°10'S, 80°38'W) on a sandy plain devoid of woody vegetation.
 We built a barbed wire fence around the experimental area to avoid the intrusion of domestic animals such as deer wandering the campus.
 The soils of the region are nutrient-poor (e.g., mean nitrogen content: 0.005 mg g^-1^) with high water infiltration rates [@muenchow_woody_2013].
@@ -70,11 +72,32 @@ Afterwards the biomass was subjected to 72 h of air drying.
 Before weighing, biomass was finally oven-dried at a temperature of 105 °C for 24 hours.
 From the total biomass we subtracted the subterranean biomass of the geophyte *Proboscidea altheifolia*, as it was already established prior to the irrigation experiment in most cases.
 
-\subsection*{Appendix 3. Number of species plotted against time during the duration of the experiment.}
+\subsection*{Appendix 3. Relationship between the response and NDVI by year.}
 
-```{r alpha-exp, echo=FALSE, fig.cap="Number of species plotted against time during the duration of the experiment.", message=FALSE}
-p_1 = readRDS(file = here("images/18_irrigation_spri.rds"))
-print(p_1)
+<!-- since we have no Figure in Appendix 2, we have to increase the figure counter by 1, then our spatial prediction will correctly displayed as Appendix 3-->
+\setcounter{figure}{2}
+
+```{r dca-ndvi, echo=FALSE, message=FALSE, fig.align="center", fig.cap="Relationship between the response (DCA1) and NDVI by year. To aid the visual interpretation, line smoothers were added.", out.width="70%"}
+data = readRDS(here("images/15_model_input_data.rds"))
+ggplot(data, aes(x = ndvi, y = DCA1, group = year)) +
+  geom_point(aes(color = as.factor(year)), alpha = 0.4) + 
+  labs(color = "year") +
+  xlab(label = "NDVI") +
+  ylab(label = "DCA1") +
+  geom_smooth(aes(color = as.factor(year)), se = FALSE) + 
+  theme_bw() +
+  coord_fixed(ratio = 0.15)
 ```
+
+\subsection*{Appendix 4. Predictive mapping of species richness.}
+
+```{r spri-dist, echo=FALSE, out.width="100%", fig.align="center", message=FALSE, warning=FALSE, fig.cap="Spatial prediction of species richness along the cross-section for different ENSO episodes using the NDVI and year interaction as predictors (used model: GAM with a spline smoother with 3 degrees of freedom and a Poisson distribution). The urban boundaries of the cities Paita, Piura and Chulucanas are displayed in black. The Piura River and its tributaries are represented by light blue lines with a black contour."}
+library("sp")
+library("sf")
+load(here("figures/15_spri_preds.rda"))
+print(spri_ndvi)
+```
+
+
 
 # References

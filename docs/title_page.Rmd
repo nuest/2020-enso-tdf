@@ -19,8 +19,8 @@ header-includes:
   #- \linenumbers
 
 title: "Monitoring and predictive mapping of floristic biodiversity along a climatic gradient in ENSO's terrestrial core region, NW Peru"
-#bibliography: transect_refs.bib
-#csl: ecography.csl
+bibliography: transect_refs.bib
+csl: ecography.csl
 # biblio-style: "natbib"
 #link-citations: true
 ---
