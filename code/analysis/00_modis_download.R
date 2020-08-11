@@ -1,4 +1,4 @@
-# Filename: 03_modis_download.R (2018-02-22)
+# Filename: 00_modis_download.R (2018-02-22)
 #
 #
 # Author(s): Jannes Muenchow, Gregor Didenko
