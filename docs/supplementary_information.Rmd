@@ -1,7 +1,7 @@
 ---
 output:
   bookdown::pdf_document2:
-    keep_tex: no
+    keep_tex: yes
     latex_engine: xelatex
     # float is needed for floating figures
     extra_dependencies: ["fontspec", "sectsty", "float"]
