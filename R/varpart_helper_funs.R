@@ -12,9 +12,13 @@
 #'   currently supported.
 #' @return A \code{list} containing two [lattice::xyplot()]s.
 #' @author Jannes Muenchow
+#' @importFrom dplyr select inner_join
+#' @importFrom vegan scores decorana
+#' @importFrom reshape2 melt
+#' @importFrom lattice xyplot panel.xyplot panel.loess
 explore_dca = function(londo, id = "pnr", choices = 1:2, expl) {
   # just keep observations found in response and explanatory tables
-  expl = inner_join(dplyr::select(londo, id), expl, by = id)
+  expl = dplyr::inner_join(dplyr::select(londo, id), expl, by = id)
   # get rid off id but keep the id as rownames
   rownames(londo) = londo[, id]
   londo = dplyr::select(londo, -id)  
@@ -26,31 +30,36 @@ explore_dca = function(londo, id = "pnr", choices = 1:2, expl) {
     stop("There are empty rows!")
   }
   
-  dca = decorana(londo, iweigh = TRUE)
+  dca = vegan::decorana(londo, iweigh = TRUE)
   # extract scores and add id
-  dca = dplyr::select(as.data.frame(scores(dca, display = "sites")), choices)
+  dca = dplyr::select(as.data.frame(vegan::scores(dca, display = "sites")),
+                      choices)
   dca = cbind(as.integer(row.names(dca)), dca)
   names(dca)[1] = id
   # join environmental data
-  tmp = inner_join(dca, expl, by = id)
-  tmp = select(tmp, -id)
-  dca1 = reshape2::melt(select(tmp, -DCA2), id.var = "DCA1")
-  dca2 = reshape2::melt(select(tmp, -DCA1), id.var = "DCA2")
-  p_1 = xyplot(DCA1 ~ value | variable, data = dca1,
-               col = "salmon", pch = 16,
-               scales = list(relation = "free"),
-               panel = function(x, y, ...) {
-                 panel.xyplot(x, y, ...)
-                 panel.loess(x, y, span = 0.9, lwd = 2.5, col = "gray")
-               })
-  p_2 = xyplot(DCA2 ~ value | variable, data = dca2,
-               col = "salmon", pch = 16,
-               scales = list(relation = "free"),
-               panel = function(x, y, ...) {
-                 panel.xyplot(x, y, ...)
-                 panel.loess(x, y, span = 0.9, lwd = 2.5, col = "gray")
-               })
-  return(list(p_1, p_2))
+  tmp = dplyr::inner_join(dca, expl, by = id)
+  tmp = dplyr::select(tmp, -id)
+  dca1 = reshape2::melt(dplyr::select(tmp, -DCA2), id.var = "DCA1")
+  dca2 = reshape2::melt(dplyr::select(tmp, -DCA1), id.var = "DCA2")
+  p_1 = 
+    lattice::xyplot(DCA1 ~ value | variable, data = dca1,
+                    col = "salmon", pch = 16,
+                    scales = list(relation = "free"),
+                    panel = function(x, y, ...) {
+                      lattice::panel.xyplot(x, y, ...)
+                      lattice::panel.loess(x, y, span = 0.9, lwd = 2.5, 
+                                           col = "gray")
+                    })
+  p_2 = 
+    lattice::xyplot(DCA2 ~ value | variable, data = dca2,
+                    col = "salmon", pch = 16,
+                    scales = list(relation = "free"),
+                    panel = function(x, y, ...) {
+                      lattice::panel.xyplot(x, y, ...)
+                      lattice::panel.loess(x, y, span = 0.9, lwd = 2.5, col = "gray")
+                    })
+  # return your result
+  list(p_1, p_2)
 }
 
 #' @title Variation partitioning applied to an ordination result or
@@ -69,11 +78,13 @@ explore_dca = function(londo, id = "pnr", choices = 1:2, expl) {
 #' @param choices Number of DCA axes to be retained (default: 1:2).
 #' @return Output of [vegan::varpart()].
 #' @author Jannes Muenchow
-ordi_varpart = function(londo, choices = 1:2,  id = "pnr", expl_1, expl_2,
+#' @importFrom dplyr inner_join select
+#' @importFrom vegan decorana anova.cca rda varpart
+ordi_varpart = function(londo, choices = 1:2, id = "pnr", expl_1, expl_2,
                         dca = TRUE) {
   # just keep observations found in response and explanatory tables
-  expl_1 = inner_join(dplyr::select(londo, id), expl_1, by = id)
-  expl_2 = inner_join(dplyr::select(londo, id), expl_2, by = id)
+  expl_1 = dplyr::inner_join(dplyr::select(londo, id), expl_1, by = id)
+  expl_2 = dplyr::inner_join(dplyr::select(londo, id), expl_2, by = id)
   # get rid off id but keep the id as rownames
   rownames(londo) = londo[, id]
   londo = dplyr::select(londo, -id)  
@@ -87,14 +98,15 @@ ordi_varpart = function(londo, choices = 1:2,  id = "pnr", expl_1, expl_2,
   # apply DCA
   if (isTRUE(dca)) {
     # d = decostand(londo, "pa")
-    dca = decorana(londo, iweigh = TRUE)
+    dca = vegan::decorana(londo, iweigh = TRUE)
     # plot(dca, display = "sites")
     # Single axis contribution
     sc = round(dca$evals / sum(dca$evals), 2)
     # Cumulative contribution
     cc = round(cumsum(dca$evals / sum(dca$evals)), 2)
     # extract scores and add id
-    dca = dplyr::select(as.data.frame(scores(dca, display = "sites")), choices)
+    dca = dplyr::select(as.data.frame(vegan::scores(dca, display = "sites")),
+                        choices)
     dca = cbind(as.integer(row.names(dca)), dca)
     names(dca)[1] = id
     vp = varpart(dplyr::select(dca, -id), dplyr::select(expl_1, -id), 
@@ -107,19 +119,23 @@ ordi_varpart = function(londo, choices = 1:2,  id = "pnr", expl_1, expl_2,
     # vp$part$indfract[4, 3] = vp$part$indfract[4, 3] + sum(d - (d * weight))
         
     # test fraction a & c
-    a = anova.cca(rda(dplyr::select(dca, -id), dplyr::select(expl_1, -id), 
-                      dplyr::select(expl_2, -id), step = 1000))
+    a = vegan::anova.cca(vegan::rda(dplyr::select(dca, -id),
+                                    dplyr::select(expl_1, -id), 
+                                    dplyr::select(expl_2, -id), 
+                                    step = 1000))
     #Test of fraction c
-    c = anova.cca(rda(dplyr::select(dca, -id), dplyr::select(expl_2, -id),
-                      dplyr::select(expl_1, -id), step = 1000))
+    c = vegan::anova.cca(vegan::rda(dplyr::select(dca, -id), 
+                                    dplyr::select(expl_2, -id),
+                                    dplyr::select(expl_1, -id), 
+                                    step = 1000))
     breaks = c(0, 0.001, 0.01, 0.05, 0.1, 1)
     labs = labels = c("***", "**", "*", ".", "")
     a = cut(a$`Pr(>F)`[1], breaks, labs, include.lowest = FALSE)
     c = cut(c$`Pr(>F)`[1], breaks, labs, include.lowest = FALSE)
 
     return(list("vp" = vp, "a" = a, "c" = c))
-  } else {
-    return(varpart(londo, expl_1, expl_2, transfo = "hel"))
+    } else {
+      return(vegan::varpart(londo, expl_1, expl_2, transfo = "hel"))
   }
 }
 
