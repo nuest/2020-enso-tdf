@@ -339,8 +339,8 @@ The explained variance roughly doubled in all other years, however, did not furt
 # attach packages
 library("vegan")
 library("dplyr")
-# read in functions
-source(here("code/funs/varpart_helper_funs.R"))
+# attach own functions
+devtools::load_all()
 
 load(here("images/16_input_varpart_plot.rda"))
 par(mfrow = c(2, 2))

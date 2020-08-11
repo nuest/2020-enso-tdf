@@ -26,8 +26,8 @@ library("latticeExtra")
 library("here")
 library("vegan")
 library("magrittr")
-# source your own functions
-source(here("code/funs/ordi_helper_funs.R"))
+# attach your own functions
+devtools::load_all()
 
 # attach cover datasets (d = Deckung, i.e., cover)
 d_11 = readRDS(here("images/11_d_11.rds")) %>%

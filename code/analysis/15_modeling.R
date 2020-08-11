@@ -33,8 +33,8 @@ library("sf")
 library("RSQLite")
 library("here")
 
-# source your own funs
-source("code/funs/spcv_helper_funs.R")
+# attach your own funs
+devtools::load_all()
 
 # attach raster stack
 ndvi = readRDS("images/00_ndvi_rasters.rds")

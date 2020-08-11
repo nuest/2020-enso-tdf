@@ -20,10 +20,7 @@
 library("vegan")
 library("dplyr")
 library("lattice")
-
-# read in functions
-source("code/funs/HighstatLib.R")  # corvif
-source("code/funs/varpart_helper_funs.R")
+devtools::load_all()
 
 # attach data
 ct_londo_11 = readRDS("images/11_ct_londo_11.rds")

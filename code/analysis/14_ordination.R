@@ -28,9 +28,9 @@ library("magrittr")
 library("ggplot2")
 library("here")
 
-# source own functions
-source("code/funs/ordi_helper_funs.R")
-source("code/funs/bestisomap.R")
+# attach own functions
+devtools::load_all()
+
 # attach data
 pa = readRDS("images/11_ct_pa.rds")
 # Remember, there are 196 obs instead of 2000 because:
