@@ -50,7 +50,7 @@ streets = st_read(con, "streets") %>%
 street = streets[1, ]
 
 ## get town polygons
-towns = st_read(con, "towns_jvs") %>%
+towns = st_read(con, "towns") %>%
   st_transform(crs = st_crs(ndvi_rasters)) %>%
   st_crop(st_bbox(ndvi_rasters))
 # get center of towns-polygon

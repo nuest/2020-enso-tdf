@@ -47,7 +47,7 @@ env_data$year = gsub(".*_", "", env_data$pnr)
 # attaching spatial data
 con = dbConnect(SQLite(), "data/tables.gpkg")
 rivers = st_read(con, "rivers")
-towns = st_read(con, "towns_jvs")
+towns = st_read(con, "towns")
 dbDisconnect(con)
 
 #**********************************************************
