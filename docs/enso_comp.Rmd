@@ -259,8 +259,8 @@ All statistical analyses were conducted in the open source software R [@rcoretea
 ```{r desc-stats, echo=FALSE}
 div = readRDS(here("images/13_desc_stats_tab.rds"))
 cap = paste("Different biodiversity measures across the studied years.",
-            "min = minimum observed number of species per plot.",
-            "max = maximum observed number of species per plot.")
+            "min = minimum observed number of species over all plots.",
+            "max = maximum observed number of species over all plots.")
 kable(div, "latex", booktabs = TRUE, escape = TRUE, 
       # align = "c",
       # col.names = linebreak(nms, align = "c"),
