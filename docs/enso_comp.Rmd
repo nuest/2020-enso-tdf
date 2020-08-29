@@ -372,7 +372,7 @@ Adding even more water revealed the true beneficial effects of fertilizing.
 The fertilized plots simulating Super El Niño episodes showed a threefold increase in plant cover compared to their unfertilized counterparts (right panel of Fig. \@ref(fig:irrigation)).
 Nevertheless, there was an upper limit regarding the beneficial effects of nutrient addition. 
 Plant cover, and thus biomass production, stopped increasing or even decreased in the fertilized Super-El Niño plots after 8 March 2013, which corresponded to 1487 mm of irrigation and 200 kg ha^-1^ of NH~4~NO~3~.
-Species richness followed a similar pattern -- highest numbers in species were recorded in the the fertilized Super-El Niño plots, though with just seven observed species the overall number remained low (Fig. \@ref(fig:spri-exp)).
+Species richness followed a similar pattern -- highest numbers in species were recorded in the fertilized Super-El Niño plots, though with just seven observed species the overall number remained low (Fig. \@ref(fig:spri-exp)).
 
 ```{r irrigation, echo=FALSE, out.width="100%", fig.align="center", warning=FALSE, message=FALSE, fig.cap="Results of the irrigation-ferilization experiment. The blue line refers to the water input, note that the left y-axis was log-transformed. The solid salmon and the gray dashed lines represent the observed plant coverage in \\% (right y-axis)."}
 # include_graphics(here("figures/17_nutrient_irrigation_experiment.png"))
