@@ -1,8 +1,8 @@
 Package: ENSO
-Title: Spatio-temporal change of biodiversity along a
-    pronounced gradient heavily influenced by ENSO.
-Version: 0.0.0.9000
-Authors@R: 
+Title: Spatio-temporal change of biodiversity along a pronounced gradient 
+    heavily influenced by ENSO.
+Version: 0.1.0
+Authors@R:
     person(given = "Jannes",
            family = "Muenchow",
            role = c("aut", "cre"),
@@ -12,37 +12,47 @@ Description: Investigating the spatio-temporal change of
     biodiversity along a pronounced gradient in NW Peru during four
     different ENSO years.
 License: MIT + file LICENSE
+Depends:
+    R (>= 3.5.0)
 Imports:
+    base,
+    cowplot,
     data.table,
-    dplyr,
-    forcats,
+    devtools,
     gdata,
-    ggplot2,
     ggpubr,
     grid,
     gridExtra,
-    gridGraphics (>= 0.4-2),
+    gridGraphics,
     here,
-    kableExtra,
     lattice,
     latticeExtra,
     magrittr,
     mgcv,
     MODIS,
     osmdata,
+    plyr,
     png,
     raster,
     rasterVis,
     RCurl,
+    readxl,
+    reshape,
     reshape2,
+    rlang,
     RSQLite,
     RStoolbox,
     sf,
+    sp,
     sperrorest,
     Ternary,
     tidyverse,
-    tmap,
-    vegan
+    vegan,
+    XML
+Suggests: 
+    kableExtra,
+    knitr,
+    stats
 Remotes: 
     pmur002/gridgraphics
 Encoding: UTF-8
