@@ -27,8 +27,11 @@ library("reshape2")
 library("RSQLite")
 library("forcats")
 library("here")
+devtools::load_all()
 
-# attach data
+# attach data if data/tables.gpkg is not already available, download_zenodo
+# downloads the data from Zenodo
+download_zenodo()
 con = dbConnect(RSQLite::SQLite(), here("data/tables.gpkg"))
 dbListTables(con)
 lf = dbReadTable(con, "lifeform", as.is = TRUE)
