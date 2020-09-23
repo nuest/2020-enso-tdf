@@ -13,3 +13,7 @@ code/misc
 *.tex
 *.gz
 .Rbuildignore
+
+.Renviron
+
+renv/
