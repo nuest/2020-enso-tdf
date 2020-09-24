@@ -17,3 +17,5 @@ code/misc
 .Renviron
 
 renv/
+
+data/processed/

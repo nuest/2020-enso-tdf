@@ -16,7 +16,7 @@
 # 1 ATTACH PACKAGES AND (INSTALLATION) SET UP--------------
 #**********************************************************
 
-# create an Earthdata account:
+# create an Earthdata account and store username and password as described in the file README.Rmd:
 # https://urs.earthdata.nasa.gov/home
 
 # optional: download MODIS Reprojection Tool (MRT) from
@@ -27,6 +27,8 @@ library("dplyr")
 library("sf")
 library("raster")
 library("RSQLite")
+library("here")
+devtools::load_all()
 
 # Note: Download GDAL from http://www.gisinternals.com/release.php
 # specify path to GDAL and paths
@@ -37,14 +39,15 @@ MODISoptions(
   # gdalPath = "C:/Program Files/GDAL",
   # gdalPath = "C:/OSGeo4W64/bin",
   # where to save downloaded MODIS data
-  localArcPath = "data/raw_data/modis",
+  localArcPath = here::here("data/raw_data/modis"),
   # where to save processed (projected, cropped and resampled) data
-  outDirPath = "data/raw_data/modis/processed",
+  outDirPath = here::here("data/processed/modis"),
   checkTools = TRUE,
-  MODISserverOrder = c("LPDAAC", "LAADS"),
-  dlmethod = "auto")
-# save options for later on
-opts = MODISoptions()
+  MODISserverOrder = c("LAADS"), #c("LPDAAC", "LAADS"),
+  dlmethod = "auto",
+  save = FALSE,
+  ask = FALSE
+)
 
 # optional:
 # assuming the MRT tools are installed in C:/modis_mrt
@@ -58,31 +61,34 @@ opts = MODISoptions()
 # MODIS:::checkTools('MRT')
 
 # attach data
-con = dbConnect(SQLite(), "data/tables.gpkg")
+download_zenodo()
+con = dbConnect(SQLite(), here("data/tables.gpkg"))
 dbListTables(con)
 sa = sf::read_sf(con, "study_area") %>%
   st_transform(crs = 4326)
+dbDisconnect(con)
 
 #**********************************************************
 # 2 DOWNLOAD AND PREPROCESS MODIS--------------------------
 #**********************************************************
 
 # create file with Earthdata login credentials
-lpdaacLogin(server = "LPDAAC") # -u enso_earthdata -p asdfASDF1234
+file.remove(path.expand("~/.netrc")) # see https://github.com/MatMatt/MODIS/issues/75
+MODIS::EarthdataLogin(usr = Sys.getenv("EARTHDATA_USER"), pwd = Sys.getenv("EARTHDATA_PASS"))
 
 # Select the product you are interested in
 prods = getProduct()
 levels(prods$TOPIC)
 filter(prods, TOPIC == "Reflectance")
 # I guess using MOD09GQ we could compute the NDVI manually, yes, see also:
-browseURL(paste0("https://lpdaac.usgs.gov/dataset_discovery/modis/",
-                 "modis_products_table/mod09gq"))
+#browseURL(paste0("https://lpdaac.usgs.gov/dataset_discovery/modis/",
+#                 "modis_products_table/mod09gq"))
 filter(prods, TOPIC == "Vegetation Indices")
 # MODIS/Terra Vegetation Indices 16-Day L3 Global 250m
 product = "MOD13Q1"
 # have a look at the product description
-browseURL(paste0("https://lpdaac.usgs.gov/dataset_discovery/modis/",
-                 "modis_products_table/mod13q1"))
+#browseURL(paste0("https://lpdaac.usgs.gov/dataset_discovery/modis/",
+#                 "modis_products_table/mod13q1"))
 # to find out about available bands you already need to have downloaded MODIS
 # data (.hdf)
 # path = file.path(opts$localArcPath, "MODIS/MOD13Q1.006/2011.03.22",
@@ -114,21 +120,28 @@ b_box = extent(sa)
 # SDSstring: "11" means give back the first two bands, here NDVI and EVI, "101"
 # would return the first and the third band
 for(i in 1:length(dates_modis$begin)) {
-    runGdal(
-    # the processed data will be stored in a folder named like job
-    job = paste("ndvi_peru", format(dates_modis$begin[i], "%y"), sep = "_"),
-    # choose the product to download, here MOD13Q1
-    product = "MOD13Q1",
-    # select only the bands you need, here NDVI, EVI
-    SDSstring = "11",
-    collection = "006",
-    begin = dates_modis$beginDOY[i],
-    end = dates_modis$endDOY[i],
-    # merge neighoring MODIS scenes, crop them to the extent of our study area
-    extent = b_box,
-    # reproject to epsg:4326
-    outProj = "4326"
+  job <- paste("ndvi_peru", format(dates_modis$begin[i], "%y"), sep = "_")
+  job_dir <- paste0(opts$outDirPath, job)
+  if (dir.exists(job_dir)) {
+    cat("Skipping download of ", job, "\n")
+  } else {
+    cat("\nDownloading data into ", job_dir, "\n")
+    MODIS::runGdal(
+      # the processed data will be stored in a folder named like job
+      job = job,
+      # choose the product to download, here MOD13Q1
+      product = "MOD13Q1",
+      # select only the bands you need, here NDVI, EVI
+      SDSstring = "11",
+      collection = "006",
+      begin = dates_modis$beginDOY[i],
+      end = dates_modis$endDOY[i],
+      # merge neighoring MODIS scenes, crop them to the extent of our study area
+      extent = b_box,
+      # reproject to epsg:4326
+      outProj = "4326"
     )
+  }
 }
 
 #**********************************************************
@@ -144,7 +157,9 @@ ndvi_image_dates = numeric(0)
 # save raster in list				  
 for (year in c(10, 11, 12, 13, 14, 15, 16, 17)) {
   # load NDVI modis data from one year into R
-  file_path = file.path(opts$outDirPath, paste("ndvi_peru_", year, sep = ""))
+  file_path = paste0(opts$outDirPath, paste0("ndvi_peru_", year))
+  cat("Computing mean NDVI in ", file_path, "\n")
+  
   ndvi_files = grep("NDVI", list.files(file_path), value = TRUE)
 
   # find out when the images were taken
@@ -165,7 +180,7 @@ for (year in c(10, 11, 12, 13, 14, 15, 16, 17)) {
 ## later months (after the vegetation period) would be more related to
 ## vegetation development, in the end we have taken the mean over the whole
 ## vegetation period)
-file_path = file.path(opts$outDirPath, "ndvi_peru_17")
+file_path = paste0(opts$outDirPath, "ndvi_peru_17")
 ndvi_files = grep("NDVI", list.files(file_path), value = TRUE)
 
 # find out when the images were taken
@@ -195,7 +210,7 @@ ndvi_rasters = brick(ndvi_mean_raster_list)
 plot(ndvi_rasters)
 
 # save rasterstack to RDA
-# saveRDS(ndvi_rasters, "images/00_ndvi_rasters.rds")
+saveRDS(ndvi_rasters, here::here("images/00_ndvi_rasters.rds"))
 # # save image for report as markdown-document
-# save(ndvi_rasters, ndvi_image_dates,
-#     file = "docu/ndvi_dca_plots/ndvi.RData")
+save(ndvi_rasters, ndvi_image_dates,
+     file = here::here("docu/ndvi_dca_plots/ndvi.RData"))

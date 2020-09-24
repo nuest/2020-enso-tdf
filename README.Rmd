@@ -1,5 +1,3 @@
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # ENSO
 
 This repository contains the code and data for the article
@@ -41,39 +39,3 @@ Zenodo deposit
 The directory `code` contains script files for all analysis steps.
 
 The directory `R` contains helper functions for the analysis and the visualisations.
-
-### Run workflow
-
-**Prerequisites**
-
-Create an [Earthdata login](https://urs.earthdata.nasa.gov/) and add an `.Renviron` file with the following content (note this intentionally overwrites other files, e.g. `~/.Renviron`):
-
-```
-EARTHDATA_USER=<your username>
-EARTHDATA_PASS=<your password>
-```
-
-Now restart R so the environment variables are picked up.
-
-Next, run the data download script.
-
-```{r data_download, eval=FALSE}
-source(here::here("code/00_modis_download.R"))
-```
-
-```{r analysis_steps, eval=FALSE}
-source(here("code/11_prep_data.R"))
-source(here("code/12_study_area_ndvi.R"))
-source(here("code/13_descriptive_stats.R"))
-source(here("code/14_ordination.R"))
-source(here("code/15_modeling.R"))
-source(here("code/16_varpart.R"))
-source(here("code/17_irrigation_nutrient_experiment.R"))
-source(here("code/18_appendix.R"))
-```
-
-``` r
-# render documents
-TODO
-```
-
